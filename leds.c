@@ -17,7 +17,7 @@ void LED1_Init(void)
    LED1_PORT->DIR |= LED1_PIN;
 
    // turn off LED
-   LED1_PORT->OUT |= LED1_PIN;
+   LED1_PORT->OUT &= ~LED1_PIN;
 
 }
 
@@ -37,9 +37,9 @@ void LED2_Init(void)
    LED2_PORT->DIR |= (LED2_RED_PIN | LED2_GREEN_PIN | LED2_BLUE_PIN);
 
    // turn off LED
-   LED2_PORT->OUT |= LED2_RED_PIN;
-   LED2_PORT->OUT |= LED2_GREEN_PIN;
-   LED2_PORT->OUT |= LED2_BLUE_PIN;
+   LED2_PORT->OUT &= ~LED2_RED_PIN;
+   LED2_PORT->OUT &= ~LED2_GREEN_PIN;
+   LED2_PORT->OUT &= ~LED2_BLUE_PIN;
 }
 
 /*
@@ -56,4 +56,101 @@ void LED1_On(void)
 void LED1_Off(void)
 {
     LED1_PORT->OUT &= ~LED1_PIN;
+}
+
+void LED2_Off(void)
+{
+   LED2_PORT->OUT &= ~LED2_RED_PIN;
+   LED2_PORT->OUT &= ~LED2_GREEN_PIN;
+   LED2_PORT->OUT &= ~LED2_BLUE_PIN;
+}
+
+/*
+/! Turn on RED LED2
+*/
+void LED2_RED(void)
+{
+    // Turn off any other colors
+    LED2_Off();
+    
+    // Turn on RED LED
+    LED2_PORT->OUT |= LED2_RED_PIN;
+}
+
+/*
+/! Turn on GREEN LED2
+*/
+void LED2_GREEN(void)
+{
+    // Turn off any other colors
+    LED2_Off();
+    
+    // Turn on GREEN LED
+    LED2_PORT->OUT |= LED2_GREEN_PIN;
+}
+
+/*
+/! Turn on BLUE LED2
+*/
+void LED2_BLUE(void)
+{
+    // Turn off any other colors
+    LED2_Off();
+    
+    // Turn on BLUE LED
+    LED2_PORT->OUT |= LED2_BLUE_PIN;
+}
+
+/*
+/! Turn on CYAN LED2
+*/
+void LED2_CYAN(void)
+{
+    // Turn off any other colors
+    LED2_Off();
+    
+    // Turn on GREEN LED
+    LED2_PORT->OUT |= LED2_GREEN_PIN;
+    // Turn on BLUE LED
+    LED2_PORT->OUT |= LED2_BLUE_PIN;
+}
+
+/*
+/! Turn on MAGENTA LED2
+*/
+void LED2_MAGENTA(void)
+{
+    // Turn off any other colors
+    LED2_Off();
+    
+    // Turn on RED LED
+    LED2_PORT->OUT |= LED2_RED_PIN;
+    // Turn on BLUE LED
+    LED2_PORT->OUT |= LED2_BLUE_PIN;
+}
+
+/*
+/! Turn on YELLOW LED2
+*/
+void LED2_YELLOW(void)
+{
+    // Turn off any other colors
+    LED2_Off();
+    
+    // Turn on RED LED
+    LED2_PORT->OUT |= LED2_RED_PIN;
+    // Turn on GREEN
+    LED2_PORT->OUT |= LED2_GREEN_PIN;
+}
+
+/*
+/! Turn on WHITE LED2
+*/
+void LED2_WHITYE(void)
+{    
+    LED2_PORT->OUT |= LED2_RED_PIN;
+    // Turn on GREEN LED
+    LED2_PORT->OUT |= LED2_GREEN_PIN;
+    // Turn on BLUE LED
+    LED2_PORT->OUT |= LED2_BLUE_PIN;
 }

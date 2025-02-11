@@ -107,40 +107,8 @@ void Switch2_Interrupt_Init(void)
 	
 }
 
-// PORT 1 IRQ Handler
-// LJBeato
-// Will be triggered if any pin on the port causes interrupt
-//
-// Derived From: Jonathan Valvano
-void PORT1_IRQHandler(void)
-{
-	float numSeconds = 0.0;
-	char temp[32];
-
-	// First we check if it came from Switch1 ?
-   if(P1->IFG & BIT1)  // we start a timer to toggle the LED1 1 second ON and 1 second OFF
-   {
-       // acknowledge P1.1 is pressed, by setting BIT1 to zero - remember P1.1 is switch 1
-       
-       
-	   // clear flag, acknowledge   
-       SWITCH_1_PORT->IFG &= ~SWITCH_1_PIN;
-   }
-	// Now check to see if it came from Switch2 ?
-   if(P1->IFG & BIT4)
-   {
-	   // acknowledge P1.4 is pressed, by setting BIT4 to zero - remember P1.4 is switch 2
-       
-       
-       // clear flag4, acknowledge
-       SWITCH_2_PORT->IFG &= ~SWITCH_2_PIN;
-   }
-}
-
 //
 // Interrupt Service Routine for Timer32-1
-//
-//
 //
 void Timer32_1_ISR(void)
 {
@@ -152,15 +120,76 @@ void Timer32_1_ISR(void)
 }
 
 //
-// Interrupt Service Routine
-//
-//
+// Interrupt Service Routine for Timer32-2
 //
 void Timer32_2_ISR(void)
+{   
+    // Check index to change color of LED2
+    switch (colors[colorIndex])
+    {
+        case RED:
+            LED2_RED();
+            break;
+        
+        case GREEN:
+            LED2_GREEN();
+            break;
+        
+        case BLUE:
+            LED2_BLUE();
+            break;
+        
+        case CYAN:
+            LED2_CYAN();
+            break;
+        
+        case MAGENTA:
+            LED2_MAGENTA();
+            break;
+        
+        case YELLOW:
+            LED2_YELLOW();
+            break;
+        
+        case WHITE:
+            LED2_WHITE();
+            break;
+            
+        default:
+            break;          
+    };
+       
+    // Increment timer counter
+    MillisecondCounter++;
+    
+    // Increment color index to advance to next color
+    colorIndex++;
+}
+
+// PORT 1 IRQ Handler
+// LJBeato
+// Will be triggered if any pin on the port causes interrupt
+//
+// Derived From: Jonathan Valvano
+void PORT1_IRQHandler(void)
 {
+	float numSeconds = 0.0;
+	char temp[32];
 
-		MillisecondCounter++;
-
+	// First we check if it came from Switch1 ?
+   if(P1->IFG & BIT1)  // we start a timer to toggle the LED1 0.5s ON and 0.5s OFF
+   {
+       // acknowledge P1.1 is pressed, by setting BIT1 to zero - remember P1.1 is switch 1   
+	   // clear flag, acknowledge   
+       SWITCH_1_PORT->IFG &= ~SWITCH_1_PIN;    
+   }
+	// Now check to see if it came from Switch2 ?
+   if(P1->IFG & BIT4)
+   {
+	   // acknowledge P1.4 is pressed, by setting BIT4 to zero - remember P1.4 is switch 2
+       // clear flag4, acknowledge
+       SWITCH_2_PORT->IFG &= ~SWITCH_2_PIN;            
+   }
 }
 
 
@@ -170,25 +199,25 @@ void Timer32_2_ISR(void)
 //
 //
 int main(void){
-	//initializations
-	uart0_init();
-	uart0_put("\r\nLab5 Timer demo\r\n");
-	// Set the Timer32-2 to 2Hz (0.5 sec between interrupts)
-	//Timer32_1_Init(&Timer32_1_ISR, SystemCoreClock/2, T32DIV1); // initialize Timer A32-1;
-        ;
-        
-	// Setup Timer32-2 with a .001 second timeout.
-	// So use DEFAULT_CLOCK_SPEED/(1/0.001) = SystemCoreClock/1000
-	//Timer32_2_Init(&Timer32_2_ISR, SystemCoreClock/1000, T32DIV1); // initialize Timer A32-1;
-	;
+   //initializations
+   uart0_init();
+   uart0_put("\r\nLab5 Timer demo\r\n");
     
-	Switch1_Interrupt_Init();
-	Switch2_Interrupt_Init();
-	LED1_Init();
-	LED2_Init();
-	EnableInterrupts();
-  while(1)
-	{
-    WaitForInterrupt();
-  }
+   // Set the Timer32-2 to 2Hz (0.5 sec between interrupts)
+   Timer32_1_Init(&Timer32_1_ISR, SystemCoreClock/2, T32DIV1); // initialize Timer A32-1;
+        
+   // Setup Timer32-2 with a .001 second timeout.
+   // So use DEFAULT_CLOCK_SPEED/(1/0.001) = SystemCoreClock/1000
+   Timer32_2_Init(&Timer32_2_ISR, SystemCoreClock/1000, T32DIV1); // initialize Timer A32-1;
+    
+   Switch1_Interrupt_Init();
+   Switch2_Interrupt_Init();
+   LED1_Init();
+   LED2_Init();
+   EnableInterrupts();
+    
+   while(1)
+   {
+       WaitForInterrupt();
+   }
 }

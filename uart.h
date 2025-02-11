@@ -31,3 +31,4 @@ extern void uart0_init(void);
 extern BYTE uart0_getchar(void);
 extern void uart0_putchar(char ch);
 extern void uart0_put(char *ptr_str);
+extern void putnumU(int i);

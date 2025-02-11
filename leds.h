@@ -34,3 +34,12 @@ extern void LED2_Init(void);
 extern BOOLEAN LED1_State(void);
 extern void LED1_On(void);
 extern void LED1_Off(void);
+
+extern void LED2_Off(void);
+extern void LED2_RED(void);
+extern void LED2_GREEN(void);
+extern void LED2_BLUE(void);
+extern void LED2_CYAN(void);
+extern void LED2_MAGENTA(void);
+extern void LED2_YELLOW(void);
+extern void LED2_WHITE(void);
