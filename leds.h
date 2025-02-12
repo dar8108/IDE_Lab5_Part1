@@ -28,13 +28,16 @@
 #define WHITE   6
 
 
-/* Function prototypes */
+/* Public Function Prototypes */
+
+// LED1
 extern void LED1_Init(void);
-extern void LED2_Init(void);
 extern BOOLEAN LED1_State(void);
 extern void LED1_On(void);
 extern void LED1_Off(void);
 
+// LED2
+extern void LED2_Init(void);
 extern void LED2_Off(void);
 extern void LED2_RED(void);
 extern void LED2_GREEN(void);

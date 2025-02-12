@@ -71,5 +71,29 @@ void Timer32_1_Init(void(*task)(void), unsigned long period, enum timer32divider
 // Outputs: none
 void Timer32_2_Init(void(*task)(void), unsigned long period, enum timer32divider div);
 
+// ***************** Timer32_1_Enable ****************
+// Enable Timer32 Timer 1
+// Inputs:  none
+// Outputs: none
+extern void Timer32_1_Enable(void);
+
+// ***************** Timer32_1_Disable ****************
+// Disable Timer32 Timer 1
+// Inputs:  none
+// Outputs: none
+extern void Timer32_1_Disable(void);
+
+// ***************** Timer32_2_Enable ****************
+// Enable Timer32 Timer 2
+// Inputs:  none
+// Outputs: none
+extern void Timer32_2_Enable(void);
+
+// ***************** Timer32_2_Disable ****************
+// Disable Timer32 Timer 2
+// Inputs:  none
+// Outputs: none
+extern void Timer32_2_Disable(void);
+
 #endif
 

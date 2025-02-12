@@ -117,3 +117,9 @@ void uart0_put(char *ptr_str)
     }
 }
 
+/*
+void putNumU(int i)
+{
+    
+} */
+

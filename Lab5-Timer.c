@@ -30,7 +30,6 @@ BOOLEAN Timer1RunningFlag = FALSE;
 BOOLEAN Timer2RunningFlag = FALSE;
 
 unsigned long MillisecondCounter = 0;
-//
 
 //  I/O interrupt pin setup
 //
@@ -111,12 +110,16 @@ void Switch2_Interrupt_Init(void)
 // Interrupt Service Routine for Timer32-1
 //
 void Timer32_1_ISR(void)
-{
-	if (LED1_State() == FALSE )
+{   
+    // Flash LED1
+	if (LED1_State() == FALSE)
 	{
 		LED1_On();
 	}
-	else LED1_Off(); 
+	else 
+    {
+        LED1_Off(); 
+    }
 }
 
 //
@@ -177,33 +180,59 @@ void PORT1_IRQHandler(void)
 	char temp[32];
 
 	// First we check if it came from Switch1 ?
-   if(P1->IFG & BIT1)  // we start a timer to toggle the LED1 0.5s ON and 0.5s OFF
+   if(P1->IFG & SWITCH_1_PIN)  
    {
        // acknowledge P1.1 is pressed, by setting BIT1 to zero - remember P1.1 is switch 1   
 	   // clear flag, acknowledge   
-       SWITCH_1_PORT->IFG &= ~SWITCH_1_PIN;    
+       SWITCH_1_PORT->IFG &= ~SWITCH_1_PIN;
+
+       // Switch 1 pressed to turn off LED
+       if (Timer1RunningFlag)
+       {
+           Timer1RunningFlag = FALSE;
+           Timer32_1_Disable();
+           LED1_Off();
+       }
+       else // Switch 1 pressed to turn start flashing LED
+       {
+           Timer1RunningFlag = TRUE;
+           Timer32_1_Enable();
+       }       
    }
 	// Now check to see if it came from Switch2 ?
-   if(P1->IFG & BIT4)
+   if(P1->IFG & SWITCH_2_PIN)
    {
 	   // acknowledge P1.4 is pressed, by setting BIT4 to zero - remember P1.4 is switch 2
        // clear flag4, acknowledge
-       SWITCH_2_PORT->IFG &= ~SWITCH_2_PIN;            
+       SWITCH_2_PORT->IFG &= ~SWITCH_2_PIN;
+
+       // 2nd Switch 2 press
+       if (Timer2RunningFlag)
+       {
+           Timer2RunningFlag = FALSE;
+           Timer32_2_Disable();
+           LED2_Off();
+       }
+       else // 1st Switch 2 press
+       {
+           Timer2RunningFlag = TRUE;
+           Timer32_2_Enable();
+           numSeconds = MillisecondCounter - numSeconds;
+           //uart0_put("Time between 1st and 2nd press: ");
+           //putnumU(numSeconds);
+       }          
    }
 }
 
-
 //
 // main
-//
-//
 //
 int main(void){
    //initializations
    uart0_init();
    uart0_put("\r\nLab5 Timer demo\r\n");
     
-   // Set the Timer32-2 to 2Hz (0.5 sec between interrupts)
+   // Set the Timer32-1 to 2Hz (0.5 sec between interrupts)
    Timer32_1_Init(&Timer32_1_ISR, SystemCoreClock/2, T32DIV1); // initialize Timer A32-1;
         
    // Setup Timer32-2 with a .001 second timeout.

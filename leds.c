@@ -58,6 +58,16 @@ void LED1_Off(void)
     LED1_PORT->OUT &= ~LED1_PIN;
 }
 
+/*
+/! Returns the state of the LED
+/! \return TRUE if LED is on,
+/!         FALSE otherwise
+*/
+BOOLEAN LED1_State(void)
+{
+    return (LED1_PORT->OUT & LED1_PIN);
+}
+
 void LED2_Off(void)
 {
    LED2_PORT->OUT &= ~LED2_RED_PIN;
@@ -146,7 +156,7 @@ void LED2_YELLOW(void)
 /*
 /! Turn on WHITE LED2
 */
-void LED2_WHITYE(void)
+void LED2_WHITE(void)
 {    
     LED2_PORT->OUT |= LED2_RED_PIN;
     // Turn on GREEN LED
@@ -154,3 +164,4 @@ void LED2_WHITYE(void)
     // Turn on BLUE LED
     LED2_PORT->OUT |= LED2_BLUE_PIN;
 }
+
