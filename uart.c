@@ -49,7 +49,7 @@ void uart0_init()
 	// baud rate
 	// N = clock/baud rate = clock_speed/BAUD_RATE
 	// set BRW register
-	EUSCI_A0->BRW = DEFAULT_CLOCK_SPEED / BAUD_RATE;
+	EUSCI_A0->BRW = SystemCoreClock / BAUD_RATE;
 
 	 // clear first and second modulation stage bit fields
 	// MCTLW register;  
@@ -117,9 +117,34 @@ void uart0_put(char *ptr_str)
     }
 }
 
-/*
-void putNumU(int i)
+
+void putnumU(int num)
 {
+    char ascii;
+    char digitArr[NUM_DIGITS_32BITS];
+    uint8_t digit;
+    int i = NUM_DIGITS_32BITS;
     
-} */
+    if (num == 0)
+    {
+        uart0_putchar('0');
+        return;
+    }
+    
+    // Loop to get each individual digit
+    while (num != 0)
+    {
+        i--;
+        digit = num % 10;     // Get last digit
+        ascii = '0' + digit;  // Calculate its ASCII value
+        digitArr[i] = ascii;  // Add to end of array
+        num /= 10;            // Shift num to the right by a digit
+    }
+    
+    // Print the characters in correct order
+    for (i = i; i < NUM_DIGITS_32BITS; i++)   
+    {
+        uart0_putchar(digitArr[i]);
+    }
+}
 

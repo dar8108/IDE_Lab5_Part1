@@ -9,8 +9,8 @@
 #include "Common.h"
 
 #define LS_BYTE_MASK      0x00FF
+#define NUM_DIGITS_32BITS 10
 
-/* Prelab */
 #define UART0_RX_PORT     P1
 #define UART0_RX_PIN      BIT2
 #define UART0_TX_PORT     P1
@@ -31,4 +31,4 @@ extern void uart0_init(void);
 extern BYTE uart0_getchar(void);
 extern void uart0_putchar(char ch);
 extern void uart0_put(char *ptr_str);
-extern void putnumU(int i);
+extern void putnumU(int num);

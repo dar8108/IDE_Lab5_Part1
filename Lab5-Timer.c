@@ -176,8 +176,7 @@ void Timer32_2_ISR(void)
 // Derived From: Jonathan Valvano
 void PORT1_IRQHandler(void)
 {
-	float numSeconds = 0.0;
-	char temp[32];
+	int numSeconds = 0;
 
 	// First we check if it came from Switch1 ?
    if(P1->IFG & SWITCH_1_PIN)  
@@ -212,14 +211,18 @@ void PORT1_IRQHandler(void)
            Timer2RunningFlag = FALSE;
            Timer32_2_Disable();
            LED2_Off();
+           numSeconds = MillisecondCounter;
+           MillisecondCounter = 0;
+           uart0_put("Time between 1st and 2nd press: ");
+           putnumU(numSeconds);
+           uart0_put("ms\r\n");
        }
        else // 1st Switch 2 press
        {
            Timer2RunningFlag = TRUE;
            Timer32_2_Enable();
-           numSeconds = MillisecondCounter - numSeconds;
-           //uart0_put("Time between 1st and 2nd press: ");
-           //putnumU(numSeconds);
+           //putnumU(MillisecondCounter);
+           //uart0_put("ms\r\n");
        }          
    }
 }
@@ -230,7 +233,7 @@ void PORT1_IRQHandler(void)
 int main(void){
    //initializations
    uart0_init();
-   uart0_put("\r\nLab5 Timer demo\r\n");
+   uart0_put("Lab5 Timer demo\r\n");
     
    // Set the Timer32-1 to 2Hz (0.5 sec between interrupts)
    Timer32_1_Init(&Timer32_1_ISR, SystemCoreClock/2, T32DIV1); // initialize Timer A32-1;
