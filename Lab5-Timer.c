@@ -126,47 +126,9 @@ void Timer32_1_ISR(void)
 // Interrupt Service Routine for Timer32-2
 //
 void Timer32_2_ISR(void)
-{   
-    // Check index to change color of LED2
-    switch (colors[colorIndex])
-    {
-        case RED:
-            LED2_RED();
-            break;
-        
-        case GREEN:
-            LED2_GREEN();
-            break;
-        
-        case BLUE:
-            LED2_BLUE();
-            break;
-        
-        case CYAN:
-            LED2_CYAN();
-            break;
-        
-        case MAGENTA:
-            LED2_MAGENTA();
-            break;
-        
-        case YELLOW:
-            LED2_YELLOW();
-            break;
-        
-        case WHITE:
-            LED2_WHITE();
-            break;
-            
-        default:
-            break;          
-    };
-       
+{        
     // Increment timer counter
     MillisecondCounter++;
-    
-    // Increment color index to advance to next color
-    colorIndex++;
 }
 
 // PORT 1 IRQ Handler
@@ -221,8 +183,43 @@ void PORT1_IRQHandler(void)
        {
            Timer2RunningFlag = TRUE;
            Timer32_2_Enable();
-           //putnumU(MillisecondCounter);
-           //uart0_put("ms\r\n");
+               // Check index to change color of LED2
+            switch (colors[colorIndex])
+            {
+                case RED:
+                    LED2_RED();
+                    break;
+                
+                case GREEN:
+                    LED2_GREEN();
+                    break;
+                
+                case BLUE:
+                    LED2_BLUE();
+                    break;
+                
+                case CYAN:
+                    LED2_CYAN();
+                    break;
+                
+                case MAGENTA:
+                    LED2_MAGENTA();
+                    break;
+                
+                case YELLOW:
+                    LED2_YELLOW();
+                    break;
+                
+                case WHITE:
+                    LED2_WHITE();
+                    break;
+                    
+                default:
+                    break;          
+            };
+            
+            // Increment color index to advance to next color
+            colorIndex++;
        }          
    }
 }
